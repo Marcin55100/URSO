@@ -38,7 +38,7 @@ namespace URSO_LED.ViewModels
         {
 
 
-            CurrentViewModel = MainViewModel._initViewModel;
+            CurrentViewModel = _initViewModel;
             LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
             ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
             OutputViewCommand = new RelayCommand(() => ExecuteOutputViewCommand());
@@ -92,7 +92,7 @@ namespace URSO_LED.ViewModels
         }
 
        
-        public String IsConnected
+        public string IsConnected
         {
             get
             {

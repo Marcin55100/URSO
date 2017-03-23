@@ -24,5 +24,15 @@ namespace URSO_LED
         {
             InitializeComponent();
         }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            Connection.ConnectionControl.CreateConnectionComponents();
+        }
+
+        private void Window_Loaded(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

@@ -10,6 +10,8 @@ using System.Net.Sockets;
 using GalaSoft.MvvmLight.Messaging;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace URSO_LED.ViewModels
 {
@@ -25,23 +27,14 @@ namespace URSO_LED.ViewModels
         /// Initializes a new instance of the ConfigViewModel class.
         /// </summary>
 
-
         private ObservableCollection<WifiNetwork> _networkList;
         Wifi wifi;
         TcpClient Client;
+
         public ConfigViewModel()
         {
-            Client = new TcpClient();
             RegisterMessage();
             _networkList = new ObservableCollection<WifiNetwork>();
-            wifi = new Wifi();
-            wifi.ConnectionStatusChanged += wifi_ConnectionStatusChanged;
-            WifiSearch(wifi);
-            if (Client.Connected)
-                ConnectionStatus = "Połączono.";
-            else
-                ConnectionStatus = "Brak połączenia.";
-
             CommandsToMethods();
         }
         #region props
@@ -140,14 +133,22 @@ namespace URSO_LED.ViewModels
         private object ReceiveMessage(MessageOne action)
         {
             if (action.Status == true)
+            {
                 Client = action.tcpClient;
+                wifi = action.wifi;
+                if (Client.Connected)
+                    ConnectionStatus = "Połączono.";
+                else
+                    ConnectionStatus = "Brak połączenia.";
+                WifiSearch(wifi);
+            }
             return null;
         }
+
         private void RefreshWifiExecute()
         {
             WifiSearch(wifi);
         }
-
 
         private void CommandsToMethods()
         {

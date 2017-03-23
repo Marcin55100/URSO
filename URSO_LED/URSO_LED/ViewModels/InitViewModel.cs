@@ -30,12 +30,12 @@ namespace URSO_LED.ViewModels
             Messenger.Default.Register<MessageOne>(this,
              (action) => ReceiveMessage(action));
 
-            Client = new TcpClient();
-            if ((ConnectionControl.ConnectBluegiga(Client,new Wifi()) == true))
-            {
-                ConnectionInfo = "Połączono";
-                Start();
-            }
+            //Client = new TcpClient();
+            //if ((ConnectionControl.ConnectBluegiga(Client,new Wifi()) == true))
+            //{
+            //    ConnectionInfo = "Połączono";
+            //    Start();
+            //}
         }
 
 
@@ -72,7 +72,7 @@ namespace URSO_LED.ViewModels
         {
             if (flag == false)
             {
-                SendClient(Client);
+                //SendClient(Client);
                 flag = true;
                 _timer.Stop();
             }
@@ -83,14 +83,6 @@ namespace URSO_LED.ViewModels
             return null;
         }
 
-
-        private object SendClient(TcpClient Client)
-        {
-            var msg = new MessageOne() { tcpClient = Client, Status = true };
-            Messenger.Default.Send<MessageOne>(msg);
-
-            return null;
-        }
         #endregion
 
     }

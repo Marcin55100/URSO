@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using SimpleWifi;
 using System.IO;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace URSO_LED.Connection
 {
@@ -21,15 +22,6 @@ namespace URSO_LED.Connection
         {
             bool connection = false;
             bool networksAvailable = false;
-            //-------------------------------------------------------------
-            if (wifi.ConnectionStatus == WifiStatus.Connected)
-            {
-
-            }
-            else
-                wifi = new Wifi();
-
-            //--------------------------------------------------------------
 
             try
             {
@@ -226,6 +218,22 @@ namespace URSO_LED.Connection
                 }
                 accessPoint.Connect(authRequest, overwrite);
             }
+        }
+
+        public static void CreateConnectionComponents()
+        {
+            TcpClient tcp = new TcpClient();
+            Wifi wifi = new Wifi();
+            ConnectBluegiga(tcp, wifi);
+            SendClient(tcp, wifi);
+        }
+
+        public static object SendClient(TcpClient Client, Wifi wifi)
+        {
+            var msg = new MessageOne() { tcpClient = Client, wifi = wifi, Status = true };
+            Messenger.Default.Send<MessageOne>(msg);
+
+            return null;
         }
     }
 }
