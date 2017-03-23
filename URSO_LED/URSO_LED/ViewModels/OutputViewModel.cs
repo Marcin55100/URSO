@@ -309,6 +309,7 @@ namespace URSO_LED.ViewModels
         private void RemoveSegmentExecute()
         {
             SegmentList.Remove(SelectedSegment);
+            id--;
         }
 
 
@@ -355,6 +356,7 @@ namespace URSO_LED.ViewModels
                     SegmentList.Add(item);
                 }
             }
+            id = SegmentList.Count;
         }
 
 

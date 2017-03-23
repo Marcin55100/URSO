@@ -36,8 +36,6 @@ namespace URSO_LED.ViewModels
 
         public MainViewModel()
         {
-
-
             CurrentViewModel = MainViewModel._initViewModel;
             LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
             ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
@@ -52,10 +50,6 @@ namespace URSO_LED.ViewModels
             ////    // Code runs "for real"
             ////}
         }
-
-
-
-
 
         #region commands
 

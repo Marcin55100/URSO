@@ -38,10 +38,11 @@
                                         <!--CommandParameter="{Binding ElementName=button1}"-->
                                         <Button Name="ledOFFButton" Content="OFF" Width="{Binding ONOff}" Tag="{Binding Id}" CommandParameter="{Binding ElementName=ledOFFButton}" Command="{Binding DataContext.LEDBtnClicked,
          RelativeSource={RelativeSource AncestorType=ListBox}}"/>
-                                        <Slider x:Name="slider" Width="{Binding PWM}" >
+                                        <Slider x:Name="slider" Minimum="0" Maximum="100" IsSnapToTickEnabled="True" Tag="{Binding Id}"  Width="{Binding PWM}" >
                                             <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="ValueChanged">
-                                                    <cmd:EventToCommand Command="{Binding Mode=OneWay, Path=SliderChanged}" PassEventArgsToCommand="True" />
+                                                <i:EventTrigger EventName="PreviewMouseUp">
+                                                    <cmd:EventToCommand Command="{Binding DataContext.SliderChanged,
+         RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding ElementName=slider}" PassEventArgsToCommand="True" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </Slider>
