@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="URSO_LED.Views.LEDView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:local="clr-namespace:URSO_LED.Views"
+             mc:Ignorable="d" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+             d:DesignHeight="300" d:DesignWidth="300"
+             >
+    <Grid>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding OnLoaded}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        
+        
+        
+        
+        <StackPanel Orientation="Vertical">
+            <Label FontWeight="Bold" Content="Wybierz konfigurację:"/>
+            <ListBox x:Name="fileBox" 
+                             SelectedValue="{Binding SelectedConfig}"
+                             ItemsSource="{Binding Path=ConfigList}" Height="50" />
+            <ListView ItemsSource="{Binding SegmentList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Nazwa" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn  Header="Sterowanie" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Name="ledONButton" Content="ON" Width="{Binding ONOff}" Tag="{Binding Id}" CommandParameter="{Binding ElementName=ledONButton}" Command="{Binding DataContext.LEDBtnClicked,
+         RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                                        <!--CommandParameter="{Binding ElementName=button1}"-->
+                                        <Button Name="ledOFFButton" Content="OFF" Width="{Binding ONOff}" Tag="{Binding Id}" CommandParameter="{Binding ElementName=ledOFFButton}" Command="{Binding DataContext.LEDBtnClicked,
+         RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                        <Slider x:Name="slider" Width="{Binding PWM}" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="ValueChanged">
+                                                    <cmd:EventToCommand Command="{Binding Mode=OneWay, Path=SliderChanged}" PassEventArgsToCommand="True" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Slider>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                                    
+
+                    </GridView>
+                </ListView.View>
+
+            </ListView>
+
+            <!--<ListBox x:Name="listBox" Height="230" VerticalAlignment="Top" ItemsSource="{Binding SegmentList}">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Grid.Column="0" Name="ledIDLabel" Content="{Binding Name}"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Name="saveConfigButton" Content="ON" />
+                            <Button Name="saveButton" Content="OFF"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>-->
+
+
+
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>

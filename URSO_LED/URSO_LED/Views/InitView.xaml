@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="URSO_LED.Views.InitView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:URSO_LED.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <StackPanel>
+            <Label x:Name="InfoLabel" Content="LED - sterowanie oświetleniem" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label x:Name="Info1Label" Content="Ustawienia portów - przyciski -> pomieszczenia" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label x:Name="Info2Label" Content="Konfiguracja - połączenie sieciowe" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label x:Name="ConnectionLabel" Content="{Binding ConnectionInfo}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

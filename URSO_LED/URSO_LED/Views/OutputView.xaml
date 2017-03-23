@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="URSO_LED.Views.OutputView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:URSO_LED.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <!--COLUMN 0 -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--ROW 0 -->
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Vertical">
+                    <Label FontWeight="Bold" Content="Nowa konfiguracja:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Wpisz nazwę:"/>
+                        <TextBox Name="configNameBox" Text="{Binding ConfigName}" MinWidth="50" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="addConfigButton" Content="Utwórz" Command="{Binding AddConfiguration}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="IsEnabled" Value="True" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=configNameBox}" Value="">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Name="saveConfigButton" Content="Zapisz" Command="{Binding SaveConfiguration}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="IsEnabled" Value="True" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=configNameBox}" Value="">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+
+
+
+
+
+                        </Button>
+
+                    </StackPanel>
+                   
+
+                </StackPanel>
+            </Grid>
+            <!--ROW 1 -->
+            <Grid Grid.Row="1">
+                <StackPanel Orientation="Vertical">
+                    <Label FontWeight="Bold" Content="Istniejąca konfiguracja:"/>
+                    <ListBox x:Name="fileBox" 
+                             SelectedValue="{Binding SelectedConfig}"
+                             ItemsSource="{Binding Path=ConfigList}" Height="50" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="removeConfigButton" Command="{Binding RemoveConfiguration}" Content="Usuń"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+
+
+
+        <!--COLUMN 1 -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListView Grid.Row="0" Name="listView" 
+                      SelectedItem="{Binding Path=SelectedSegment}"
+                      ItemsSource="{Binding Path=SegmentList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding Type}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <!--ROW 1 -->
+            <Grid Grid.Row="1">
+                <StackPanel Visibility="{Binding Segments}">
+                    <Label FontWeight="Bold" Content="Segmenty:"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Nazwa:"/>
+                    <TextBox Name="ledNameBox" Text="{Binding SegmentName}" MinWidth="50" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Typ:"/>
+                        <ComboBox Name="TypeBox" ItemsSource="{Binding Path=TypeList}"
+                  SelectedValue="{Binding Path=SegmentType}"
+                                  />
+                    </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                        <Button Name="addSegmentButton" Content="Dodaj" Command="{Binding AddSegment}">
+                        </Button>
+                        <Button Name="removeButton" Command="{Binding RemoveSegment}" Content="Usuń"/>
+                </StackPanel>
+
+                </StackPanel>
+
+
+            </Grid>
+
+
+
+
+
+            </Grid>
+
+    </Grid>
+</UserControl>
