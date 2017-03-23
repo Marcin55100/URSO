@@ -41,7 +41,7 @@ namespace URSO_LED.ViewModels
             LoadConfigurations();
             OnLoaded = new RelayCommand(() => OnLoadedExecute(), () => true);
             LEDBtnClicked = new RelayCommand<object>((s) => LEDBtnClickedExecute(s));
-            SliderChanged = new RelayCommand(() => SliderChangedExecute());
+            SliderChanged = new RelayCommand<object>((s) => SliderChangedExecute(s));
 
             LoadXml();
         }
@@ -104,7 +104,7 @@ namespace URSO_LED.ViewModels
         #region commands
         public ICommand OnLoaded { get; private set; }
         public RelayCommand<object> LEDBtnClicked { get; private set; }
-        public ICommand SliderChanged { get; private set; }
+        public RelayCommand<object> SliderChanged { get; private set; }
 
 
 
@@ -170,30 +170,47 @@ namespace URSO_LED.ViewModels
             LoadConfigurations();
         }
 
-        //private void LEDOnExecute(int ledNumber)
-        //{
-        //    SendPacket("LON", ledNumber.ToString());
-        //}
-
-        private void SliderChangedExecute()
+        private void SliderChangedExecute(object _slider)
         {
-            string name = "marcin";
-        }
+            string number;
+            Slider slider = _slider as Slider;
+            double PWM = slider.Value;
+            if (PWM < 10)
+                number = "00" + PWM.ToString();
+            else if (PWM > 9 && PWM < 100)
+                number = "0" + PWM.ToString();
+            else
+                number = PWM.ToString();
 
+            string led= slider.Tag.ToString();
+            SendPacket("P"+led, number);
+            
+        }
 
         private void LEDBtnClickedExecute(object clickedButton)
         {
+            string number;
             Button button = clickedButton as Button;
+            if ((int)button.Tag < 10)
+                number = "0"+button.Tag.ToString();
+            else
+                number= button.Tag.ToString();
 
-            if(button.Name=="ledONButton")
-                SendPacket("LON", button.Tag.ToString());
-            else if(button.Name == "ledOFFButton")
-                SendPacket("LOF", button.Tag.ToString());
+            if (button.Name == "ledONButton")
+                SendPacket("LON", number);
+            else if (button.Name == "ledOFFButton")
+                SendPacket("LOF", number);
         }
 
         private void SendPacket(String Command, String Number)
         {
             string message;
+            StringBuilder builder = new StringBuilder();
+
+                builder.Append(Command).Append(Number);
+                message = builder.ToString();
+                byte[] Buffer = Encoding.ASCII.GetBytes(message);
+
             if (Client.Connected)
             {
                 NetworkStream Stream = Client.GetStream();
@@ -201,10 +218,6 @@ namespace URSO_LED.ViewModels
                 {
                     try
                     {
-                        StringBuilder builder = new StringBuilder();
-                        builder.Append(Command).Append(0).Append(Number);
-                         message = builder.ToString();
-                          byte[] Buffer = Encoding.ASCII.GetBytes(message);
                          Stream.Write(Buffer, 0, Buffer.Length);
                     }
                     catch (SystemException)
