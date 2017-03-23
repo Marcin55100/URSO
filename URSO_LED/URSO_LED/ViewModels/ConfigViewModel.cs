@@ -126,7 +126,7 @@ namespace URSO_LED.ViewModels
 
         private void wifi_ConnectionStatusChanged(object sender, WifiStatusEventArgs e)
         {
-            WifiSearch(wifi);
+            //WifiSearch(wifi);
             //automatyczne odświeżanie listy sieci
         }
 
