@@ -26,12 +26,12 @@
                         <TextBox Name="configNameBox" Text="{Binding ConfigName}" MinWidth="50" TextWrapping="Wrap"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Name="addConfigButton" Content="Utwórz" Command="{Binding AddConfiguration}">
+                        <Button Name="addConfigButton" DataContext="{Binding SelectedNetwork}" Content="Utwórz" Command="{Binding AddConfiguration}">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="IsEnabled" Value="True" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=configNameBox}" Value="">
+                                        <DataTrigger Binding="{Binding Source=SelectedNetwork, Path=Font}" Value="Bold">
                                             <Setter Property="IsEnabled" Value="False" />
                                         </DataTrigger>
                                     </Style.Triggers>

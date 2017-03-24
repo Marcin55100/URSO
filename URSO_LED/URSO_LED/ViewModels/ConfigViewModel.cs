@@ -12,7 +12,10 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Timers;
-
+//Do zrobienia:
+//PasswordBox
+//Service Mode
+//
 namespace URSO_LED.ViewModels
 {
     /// <summary>
@@ -28,6 +31,7 @@ namespace URSO_LED.ViewModels
         /// </summary>
 
         private ObservableCollection<WifiNetwork> _networkList;
+        public WifiNetwork _selectedNetwork;
         Wifi wifi;
         TcpClient Client;
 
@@ -59,8 +63,21 @@ namespace URSO_LED.ViewModels
 
         public String Password { get; set; }
         public String ConnectionStatus { get; set; } = "Łączę ze sterownikiem...";
-        public WifiNetwork SelectedNetwork { get; set; }
+        public WifiNetwork SelectedNetwork
+        {
+            get { return _selectedNetwork; }
 
+
+            set
+            {
+                if (value == _selectedNetwork)
+                    return;
+                _selectedNetwork = value;
+                RaisePropertyChanged("SelectedNetwork");
+            }
+
+        }
+        public String Bold { get; set; } = "Bold";
 
         #endregion
 

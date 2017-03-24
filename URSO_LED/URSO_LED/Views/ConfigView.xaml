@@ -26,7 +26,18 @@
             <Label x:Name="passwordLabel" Content="Podaj hasło:"/>
             <!--<PasswordBox x:Name="passwordBox" PasswordChar="*" /> -->
             <TextBox x:Name="passwordBox" Text="{Binding Password}"/>
-            <Button x:Name="connectButton" Content="Połącz" Command="{Binding ConnectToNetwork}" HorizontalAlignment="Left"  VerticalAlignment="Top" />
+            <Button x:Name="connectButton" Content="Połącz" Command="{Binding ConnectToNetwork}" HorizontalAlignment="Left"  VerticalAlignment="Top">
+                <Button.Style>
+                    <Style TargetType="Button" >
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedNetwork.Font}" Value="Bold">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button x:Name="changeButton" Content="Przełącz sieć" HorizontalAlignment="Left" VerticalAlignment="Top" />
             <Label x:Name="infoLabel" Content="{Binding ConnectionStatus}"/>
         </StackPanel>
