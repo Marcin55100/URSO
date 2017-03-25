@@ -13,7 +13,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Timers;
 using URSO_LED.Security;
-//TODO PasswordBox, Service Mode, Mądrzejsza zmiana widoku, Skalowalny widok, Odpowiednie rozszerzanie kolumn
+//TODO Service Mode, Mądrzejsza zmiana widoku, Skalowalny widok, Odpowiednie rozszerzanie kolumn
 
 namespace URSO_LED.ViewModels
 {

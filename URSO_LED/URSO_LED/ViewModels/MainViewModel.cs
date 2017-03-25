@@ -28,21 +28,22 @@ namespace URSO_LED.ViewModels
         /// 
         private ViewModelBase _currentViewModel;
         private string _isConnected = "false";
-        readonly static LEDViewModel _ledViewModel = new LEDViewModel();
-        readonly static InitViewModel _initViewModel = new InitViewModel();
-        readonly static ConfigViewModel _configViewModel = new ConfigViewModel();
-        readonly static OutputViewModel _outputViewModel = new OutputViewModel();
+       // readonly static LEDViewModel _ledViewModel = new LEDViewModel();
+       // readonly static InitViewModel _initViewModel = new InitViewModel();
+       // readonly static ConfigViewModel _configViewModel = new ConfigViewModel();
+       // readonly static OutputViewModel _outputViewModel = new OutputViewModel();
         TcpClient Client;
 
         public MainViewModel()
         {
 
 
-            CurrentViewModel = _initViewModel;
+           // CurrentViewModel = _initViewModel;
             LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
             ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
             OutputViewCommand = new RelayCommand(() => ExecuteOutputViewCommand());
             RegisterMessage();
+
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.
@@ -63,15 +64,22 @@ namespace URSO_LED.ViewModels
 
         private void ExecuteLEDViewCommand()
         {
-            CurrentViewModel=MainViewModel._ledViewModel;
+           // CurrentViewModel=MainViewModel._ledViewModel;
+            var msg = new GoToPageMessage() { PageName = "LEDView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
+
         }
         private void ExecuteConfigViewCommand()
         {
-            CurrentViewModel = MainViewModel._configViewModel;
+           // CurrentViewModel = MainViewModel._configViewModel;
+            var msg = new GoToPageMessage() { PageName = "ConfigView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
         }
         private void ExecuteOutputViewCommand()
         {
-            CurrentViewModel = MainViewModel._outputViewModel;
+           // CurrentViewModel = MainViewModel._outputViewModel;
+            var msg = new GoToPageMessage() { PageName = "OutputView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
         }
         #endregion
 

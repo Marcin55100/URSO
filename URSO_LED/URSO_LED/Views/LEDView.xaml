@@ -8,6 +8,7 @@
              mc:Ignorable="d" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+             DataContext="{Binding LEDViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300"
              >
     <Grid>

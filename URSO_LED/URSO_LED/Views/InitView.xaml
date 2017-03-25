@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:URSO_LED.Views"
              mc:Ignorable="d" 
+             DataContext="{Binding InitViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel>

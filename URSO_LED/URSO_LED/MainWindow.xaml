@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:URSO_LED"
         mc:Ignorable="d"
         Title="MainWindow" Height="380" Width="524"
-        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         ContentRendered="Window_ContentRendered" 
         Loaded="Window_Loaded"
         >
@@ -59,8 +59,8 @@
         </Grid>
 
         <!-- COLUMN 1-->
-        <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
-        
+        <ContentControl Grid.Column="1" Name="contentControl1"  />
+       
        
 
     </Grid>

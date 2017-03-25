@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using URSO_LED.ViewControl;
 
 namespace URSO_LED.ViewModels
 {
@@ -31,28 +32,75 @@ namespace URSO_LED.ViewModels
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                // Create design time view services and models
+                SimpleIoc.Default.Register<IDataService, DesignDataService>();
+            }
+            else
+            {
+                // Create run time view services and models
+                SimpleIoc.Default.Register<IDataService, DataService>();
+            }
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<LEDViewModel>();
+            SimpleIoc.Default.Register<OutputViewModel>();
+            SimpleIoc.Default.Register<ConfigViewModel>();
         }
-
-        public MainViewModel Main
+        /// <summary>
+        /// Gets the ViewModelPropertyName property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public MainViewModel MainViewModel
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        
+        /// <summary>
+        /// Gets the ViewModelPropertyName property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public LEDViewModel LEDViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<LEDViewModel>();
+            }
+        }
+        /// <summary>
+        /// Gets the ViewModelPropertyName property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public OutputViewModel OutputViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<OutputViewModel>();
+            }
+        }
+        /// <summary>
+        /// Gets the ViewModelPropertyName property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public ConfigViewModel ConfigViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ConfigViewModel>();
+            }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

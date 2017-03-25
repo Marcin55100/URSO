@@ -82,10 +82,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Connection\ConnectionControl.cs" />
+    <Compile Include="Connection\GoToPageMessage.cs" />
     <Compile Include="Connection\MessageOne.cs" />
     <Compile Include="Models\LEDSegment.cs" />
     <Compile Include="Models\WifiNetwork.cs" />
     <Compile Include="Security\IHavePassword.cs" />
+    <Compile Include="ViewControl\DataItem.cs" />
+    <Compile Include="ViewControl\DataService.cs" />
+    <Compile Include="ViewControl\DesignDataService.cs" />
+    <Compile Include="ViewControl\IDataService.cs" />
     <Compile Include="ViewModels\ConfigViewModel.cs" />
     <Compile Include="ViewModels\InitViewModel.cs" />
     <Compile Include="ViewModels\LEDViewModel.cs" />

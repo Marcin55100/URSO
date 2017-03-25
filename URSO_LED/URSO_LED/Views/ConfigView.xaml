@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:URSO_LED.Views"
              mc:Ignorable="d" 
              x:Name="jeden"
+             DataContext="{Binding ConfigViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
