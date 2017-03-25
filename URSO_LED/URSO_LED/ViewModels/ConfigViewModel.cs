@@ -12,10 +12,9 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Timers;
-//Do zrobienia:
-//PasswordBox
-//Service Mode
-//
+using URSO_LED.Security;
+//TODO PasswordBox, Service Mode, Mądrzejsza zmiana widoku, Skalowalny widok, Odpowiednie rozszerzanie kolumn
+
 namespace URSO_LED.ViewModels
 {
     /// <summary>
@@ -83,7 +82,7 @@ namespace URSO_LED.ViewModels
 
         #region commands
 
-        public ICommand ConnectToNetwork { get; private set; }
+        public RelayCommand<object> ConnectToNetwork { get; private set; }
         public ICommand RefreshWifi { get; private set; }
         #endregion
 
@@ -104,12 +103,15 @@ namespace URSO_LED.ViewModels
             }
         }
 
-        private void ConnectToNetworkExecute()
+        private void ConnectToNetworkExecute(object parameter)
         {
             string password = "";
+            var passwordContainer = parameter as IHavePassword;
+            var secureString = passwordContainer.Password;
+            
             if (wifi.GetAccessPoints().Find(item => item.Name == SelectedNetwork.Name).IsSecure)
             {
-                password = Password;
+                password = ConvertToUnsecureString(secureString);
             }
             ConnectionControl.ConnectNetwork(wifi, SelectedNetwork.Name, password);
 
@@ -132,6 +134,27 @@ namespace URSO_LED.ViewModels
             }
             WifiSearch(wifi);
         }
+
+
+        private string ConvertToUnsecureString(System.Security.SecureString securePassword)
+        {
+            if (securePassword == null)
+            {
+                return string.Empty;
+            }
+
+            IntPtr unmanagedString = IntPtr.Zero;
+            try
+            {
+                unmanagedString = System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocUnicode(securePassword);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(unmanagedString);
+            }
+            finally
+            {
+                System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+        }
+
 
 
         private void wifi_ConnectionStatusChanged(object sender, WifiStatusEventArgs e)
@@ -169,7 +192,7 @@ namespace URSO_LED.ViewModels
 
         private void CommandsToMethods()
         {
-            ConnectToNetwork = new RelayCommand(() => ConnectToNetworkExecute(), () => true);
+            ConnectToNetwork = new RelayCommand<object>((s) => ConnectToNetworkExecute(s));
             RefreshWifi = new RelayCommand(() => RefreshWifiExecute(), () => true);
         }
 

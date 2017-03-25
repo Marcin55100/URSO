@@ -85,6 +85,7 @@
     <Compile Include="Connection\MessageOne.cs" />
     <Compile Include="Models\LEDSegment.cs" />
     <Compile Include="Models\WifiNetwork.cs" />
+    <Compile Include="Security\IHavePassword.cs" />
     <Compile Include="ViewModels\ConfigViewModel.cs" />
     <Compile Include="ViewModels\InitViewModel.cs" />
     <Compile Include="ViewModels\LEDViewModel.cs" />

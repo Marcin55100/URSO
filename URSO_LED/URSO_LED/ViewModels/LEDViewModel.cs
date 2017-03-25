@@ -153,7 +153,7 @@ namespace URSO_LED.ViewModels
                     if (item.Type == "PWM")
                     { 
                         item.ONOff = "0";
-                        item.PWM = "100";
+                        item.PWM = "150";
                     }
                     else
                     { 
