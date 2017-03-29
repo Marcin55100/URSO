@@ -31,6 +31,7 @@ namespace URSO_LED.ViewModels
         private ObservableCollection<String> _configList;
         private ObservableCollection<LEDSegment> _segmentList;
         private string _selectedConfig;
+        private string _gridColumnWidth="100";
         public TcpClient Client;
         public LEDViewModel()
         {
@@ -42,7 +43,7 @@ namespace URSO_LED.ViewModels
             OnLoaded = new RelayCommand(() => OnLoadedExecute(), () => true);
             LEDBtnClicked = new RelayCommand<object>((s) => LEDBtnClickedExecute(s));
             SliderChanged = new RelayCommand<object>((s) => SliderChangedExecute(s));
-
+            ColumnSizeChanged = new RelayCommand<object>((s) => ColumnSizeChangedExecute(s));
             LoadXml();
         }
 
@@ -61,6 +62,23 @@ namespace URSO_LED.ViewModels
                 _selectedConfig = value;
                 LoadXml();
                 RaisePropertyChanged("SelectedConfig");
+
+            }
+
+        }
+
+        public String GridColumnWidth
+        {
+            get
+            {
+                return _gridColumnWidth;
+            }
+            set
+            {
+                if (value == _gridColumnWidth)
+                    return;
+                _gridColumnWidth = value;
+                RaisePropertyChanged("GridColumnWidth");
 
             }
 
@@ -105,7 +123,7 @@ namespace URSO_LED.ViewModels
         public ICommand OnLoaded { get; private set; }
         public RelayCommand<object> LEDBtnClicked { get; private set; }
         public RelayCommand<object> SliderChanged { get; private set; }
-
+        public RelayCommand<object> ColumnSizeChanged { get; private set; }
 
 
 
@@ -114,6 +132,33 @@ namespace URSO_LED.ViewModels
 
 
         #region methods
+
+
+        private void ColumnSizeChangedExecute(object listView)
+        {
+            double columnWidth=100;
+            ListView list = listView as ListView;
+            GridView gridView = list.View as GridView;
+
+            foreach (var column in gridView.Columns)
+            {
+                if(column.Header.ToString()=="Sterowanie")
+                {
+                    columnWidth = column.Width;
+                }
+
+            }
+
+            foreach (var segment in SegmentList)
+            {
+                if (double.Parse(segment.PWM) != 0)
+                    segment.PWM = (columnWidth-2).ToString();
+            }
+
+
+        }
+
+
         private void LoadConfigurations()
         {
             var systemPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);

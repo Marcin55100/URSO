@@ -10,6 +10,7 @@
              xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
              DataContext="{Binding LEDViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300"
+             
              >
     <Grid>
         <i:Interaction.Triggers>
@@ -26,11 +27,19 @@
             <ListBox x:Name="fileBox" 
                              SelectedValue="{Binding SelectedConfig}"
                              ItemsSource="{Binding Path=ConfigList}" Height="50" />
-            <ListView ItemsSource="{Binding SegmentList}">
+            <ListView Name="listView1" ItemsSource="{Binding SegmentList}">
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseUp">
+                        <cmd:EventToCommand Command="{Binding DataContext.ColumnSizeChanged,
+         RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding ElementName=listView1}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Nazwa" Width="Auto" DisplayMemberBinding="{Binding Name}" />
-                        <GridViewColumn  Header="Sterowanie" Width="Auto">
+                        <GridViewColumn Header="Sterowanie" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -39,7 +48,7 @@
                                         <!--CommandParameter="{Binding ElementName=button1}"-->
                                         <Button Name="ledOFFButton" Content="OFF" Width="{Binding ONOff}" Tag="{Binding Id}" CommandParameter="{Binding ElementName=ledOFFButton}" Command="{Binding DataContext.LEDBtnClicked,
          RelativeSource={RelativeSource AncestorType=ListBox}}"/>
-                                        <Slider x:Name="slider" Minimum="0" Maximum="100" IsSnapToTickEnabled="True" Tag="{Binding Id}"  Width="{Binding PWM}" >
+                                        <Slider x:Name="slider" Minimum="0" Maximum="100" IsSnapToTickEnabled="True" Tag="{Binding Id}" Width="{Binding PWM}" >
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="PreviewMouseUp">
                                                     <cmd:EventToCommand Command="{Binding DataContext.SliderChanged,
