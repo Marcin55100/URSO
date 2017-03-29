@@ -40,6 +40,7 @@ namespace URSO_LED.ViewModels
             _networkList = new ObservableCollection<WifiNetwork>();
             CommandsToMethods();
         }
+
         #region props
 
         public ObservableCollection<WifiNetwork> NetworkList
@@ -47,7 +48,6 @@ namespace URSO_LED.ViewModels
             get
             {
                 return _networkList;
-
             }
             set
             {
@@ -57,16 +57,12 @@ namespace URSO_LED.ViewModels
                 _networkList = value;
                 RaisePropertyChanged("NetworkList");
             }
-
         }
-
-        public String Password { get; set; }
-        public String ConnectionStatus { get; set; } = "Łączę ze sterownikiem...";
+        public string Password { get; set; }
+        public string ConnectionStatus { get; set; } = "Łączę ze sterownikiem...";
         public WifiNetwork SelectedNetwork
         {
             get { return _selectedNetwork; }
-
-
             set
             {
                 if (value == _selectedNetwork)
@@ -74,7 +70,6 @@ namespace URSO_LED.ViewModels
                 _selectedNetwork = value;
                 RaisePropertyChanged("SelectedNetwork");
             }
-
         }
         public String Bold { get; set; } = "Bold";
 
@@ -84,6 +79,7 @@ namespace URSO_LED.ViewModels
 
         public RelayCommand<object> ConnectToNetwork { get; private set; }
         public ICommand RefreshWifi { get; private set; }
+
         #endregion
 
         #region methods
@@ -98,13 +94,20 @@ namespace URSO_LED.ViewModels
                 {
                     fontValue = "Normal";
                     if (accessPoint.IsConnected) fontValue = "Bold";
-                    NetworkList.Add(new WifiNetwork { Name = accessPoint.Name, Font= fontValue });
+                    NetworkList.Add(new WifiNetwork { Name = accessPoint.Name, Font = fontValue });
                 }
             }
         }
 
         private void ConnectToNetworkExecute(object parameter)
         {
+            if (Client.Connected)
+            {
+                Client.GetStream().Close();
+                Client.Close();
+                Client = new TcpClient();
+            }
+            
             string password = "";
             var passwordContainer = parameter as IHavePassword;
             var secureString = passwordContainer.Password;
@@ -120,19 +123,21 @@ namespace URSO_LED.ViewModels
                 if (wifi.GetAccessPoints().Find(item => item.IsConnected).Name == SelectedNetwork.Name)
                 {
                     ConnectionControl.DeleteMemory();
-                    if (ConnectionControl.ConnectBluegiga(Client, wifi))
-                    {
-                        MessageBox.Show("Połączono.");
-                        ConnectionStatus = "Połączono";
-                    }
-                    else
-                    {
-                        MessageBox.Show("Brak połączenia.");
-                        ConnectionStatus = "Brak połączenia.";
-                    }
+                    ConnectionControl.ConnectBluegiga(Client, wifi);
+                    //if (ConnectionControl.ConnectBluegiga(Client, wifi))
+                    //{
+                    //    MessageBox.Show("Połączono.");
+                    //    ConnectionStatus = "Połączono";
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Brak połączenia.");
+                    //    ConnectionStatus = "Brak połączenia.";
+                    //}
                 }
             }
             WifiSearch(wifi);
+            ConnectionControl.SendClient(Client, wifi);
         }
 
 

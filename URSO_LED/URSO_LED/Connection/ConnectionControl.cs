@@ -161,14 +161,18 @@ namespace URSO_LED.Connection
         {
             try
             {
-                tcp.Connect(IP, port);
+                //tcp.Connect(IP, port);
+                var task =  tcp.ConnectAsync(IP, port);
+                task.Wait();
             }
             catch (Exception)
             {
                 try
                 {
                     IP = UDPListener();
-                    tcp.Connect(IP, port);
+                    //tcp.Connect(IP, port);
+                    var task = tcp.ConnectAsync(IP, port);
+                    task.Wait();
                 }
                 catch (Exception) { }
             }

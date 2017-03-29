@@ -36,9 +36,7 @@ namespace URSO_LED.ViewModels
 
         public MainViewModel()
         {
-
-
-           // CurrentViewModel = _initViewModel;
+            // CurrentViewModel = _initViewModel;
             LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
             ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
             OutputViewCommand = new RelayCommand(() => ExecuteOutputViewCommand());
@@ -54,13 +52,7 @@ namespace URSO_LED.ViewModels
             ////}
         }
 
-
-
-
-
         #region commands
-
-       
 
         private void ExecuteLEDViewCommand()
         {
@@ -98,16 +90,13 @@ namespace URSO_LED.ViewModels
                 RaisePropertyChanged("CurrentViewModel");
             }
         }
-
        
         public string IsConnected
         {
             get
             {
                 return _isConnected;
-
             }
-
             set
             {
                 if (_isConnected == value)
@@ -115,11 +104,9 @@ namespace URSO_LED.ViewModels
                 _isConnected = value;
                 RaisePropertyChanged("IsConnected");
             }
-
         } 
 
         #endregion
-
 
         #region commands
         public ICommand LEDViewCommand { get; private set; }
@@ -128,6 +115,7 @@ namespace URSO_LED.ViewModels
         #endregion
 
         #region methods
+
         private void RegisterMessage()
         {
             Messenger.Default.Register<MessageOne>(this,
@@ -145,8 +133,5 @@ namespace URSO_LED.ViewModels
         }
 
         #endregion
-
-
-
     }
 }

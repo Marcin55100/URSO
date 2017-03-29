@@ -128,7 +128,7 @@ namespace URSO_LED
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            Connection.ConnectionControl.CreateConnectionComponents();
+            ConnectionControl.CreateConnectionComponents();
         }
 
         private void Window_Loaded(object sender, EventArgs e)
