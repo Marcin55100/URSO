@@ -9,12 +9,26 @@ namespace URSO_LED.Models
 {
     public class LEDSegment : INotifyPropertyChanged
     {
+        private string _pwm="";
         public event PropertyChangedEventHandler PropertyChanged;
         public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public string Blink { get; set; } = "White";
-        public string PWM { get; set; }
+
+        public string PWM
+        {
+            get { return _pwm; }
+
+            set
+            {
+                if (value == _pwm)
+                    return;
+                _pwm = value;
+                NotifyPropertyChanged("PWM");
+
+            }
+        }
         public string ONOff { get; set; }
 
 
