@@ -40,7 +40,18 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="changeButton" Content="Przełącz sieć" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Button x:Name="changeButton" Content="Przełącz sieć" Command="{Binding ChangeNetwork}" CommandParameter="{Binding ElementName=jeden}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button.Style>
+                    <Style TargetType="Button" >
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedNetwork.Font}" Value="Bold">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Label x:Name="infoLabel" Content="{Binding ConnectionStatus}"/>
         </StackPanel>
 

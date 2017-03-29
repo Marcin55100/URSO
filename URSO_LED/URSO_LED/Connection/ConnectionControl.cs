@@ -13,7 +13,7 @@ namespace URSO_LED.Connection
 {
     class ConnectionControl
     {
-        const string defaultAP = "Bluegiga";
+        const string defaultAP = "xBluegiga";
         const string defaultPW = "bluegiga";
         const string memoryFile = @"\ConnectionInfo.txt";
         const int port = 54069;

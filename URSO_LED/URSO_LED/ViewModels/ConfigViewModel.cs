@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Timers;
 using URSO_LED.Security;
+using System.Text;
 //TODO Service Mode, Skalowalny widok, Odpowiednie rozszerzanie kolumn
 
 namespace URSO_LED.ViewModels
@@ -78,6 +79,7 @@ namespace URSO_LED.ViewModels
         #region commands
 
         public RelayCommand<object> ConnectToNetwork { get; private set; }
+        public RelayCommand<object> ChangeNetwork { get; private set; }
         public ICommand RefreshWifi { get; private set; }
 
         #endregion
@@ -140,6 +142,27 @@ namespace URSO_LED.ViewModels
             ConnectionControl.SendClient(Client, wifi);
         }
 
+        private void ChangeNetworkExecute(object parameter)
+        {
+            var passwordContainer = parameter as IHavePassword;
+            var secureString = passwordContainer.Password;
+            string password = ConvertToUnsecureString(secureString);
+
+            NetworkStream stream = Client.GetStream();
+            if (stream.CanWrite)
+            {
+                byte[] message = Encoding.ASCII.GetBytes("BSSID" + SelectedNetwork.Name);
+                stream.Write(message, 0, message.Length);
+                message = Encoding.ASCII.GetBytes("NETPW" + password);
+                stream.Write(message, 0, message.Length);
+            }
+            var task = Task.Run(async delegate
+            {
+                await Task.Delay(20000);
+            });
+            task.Wait();
+            ConnectToNetworkExecute(parameter);
+        }
 
         private string ConvertToUnsecureString(System.Security.SecureString securePassword)
         {
@@ -159,8 +182,6 @@ namespace URSO_LED.ViewModels
                 System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
-
-
 
         private void wifi_ConnectionStatusChanged(object sender, WifiStatusEventArgs e)
         {
@@ -198,6 +219,7 @@ namespace URSO_LED.ViewModels
         private void CommandsToMethods()
         {
             ConnectToNetwork = new RelayCommand<object>((s) => ConnectToNetworkExecute(s));
+            ChangeNetwork = new RelayCommand<object>((s) => ChangeNetworkExecute(s));
             RefreshWifi = new RelayCommand(() => RefreshWifiExecute(), () => true);
         }
 
