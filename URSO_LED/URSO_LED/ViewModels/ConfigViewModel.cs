@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using URSO_LED.Security;
 using System.Text;
+using System.IO;
 //TODO Service Mode, Skalowalny widok, Odpowiednie rozszerzanie kolumn
 
 namespace URSO_LED.ViewModels
@@ -120,6 +121,12 @@ namespace URSO_LED.ViewModels
             }
             ConnectionControl.ConnectNetwork(wifi, SelectedNetwork.Name, password);
 
+            var task = Task.Run(async delegate
+            {
+                await Task.Delay(20000);
+            });
+            task.Wait();
+
             if (wifi.ConnectionStatus == WifiStatus.Connected)
             {
                 if (wifi.GetAccessPoints().Find(item => item.IsConnected).Name == SelectedNetwork.Name)
@@ -147,20 +154,23 @@ namespace URSO_LED.ViewModels
             var passwordContainer = parameter as IHavePassword;
             var secureString = passwordContainer.Password;
             string password = ConvertToUnsecureString(secureString);
+            Client.NoDelay = false;
 
             NetworkStream stream = Client.GetStream();
+            StreamWriter writer = new StreamWriter(stream);
             if (stream.CanWrite)
             {
                 byte[] message = Encoding.ASCII.GetBytes("BSSID" + SelectedNetwork.Name);
-                stream.Write(message, 0, message.Length);
+                //writer.AutoFlush = true;
+                //stream.Write(message, 0, message.Length);
+                writer.Write("BSSID" + SelectedNetwork.Name);
+                writer.Flush();
                 message = Encoding.ASCII.GetBytes("NETPW" + password);
-                stream.Write(message, 0, message.Length);
+                //stream.Write(message, 0, message.Length);
+                writer.Write("NETPW" + password);
+                writer.Flush();
+                stream.Flush();
             }
-            var task = Task.Run(async delegate
-            {
-                await Task.Delay(20000);
-            });
-            task.Wait();
             ConnectToNetworkExecute(parameter);
         }
 

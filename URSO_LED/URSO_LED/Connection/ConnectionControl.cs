@@ -80,6 +80,7 @@ namespace URSO_LED.Connection
                     }
                     else if (wifi.ConnectionStatus == WifiStatus.Connected)
                     {
+                        Console.WriteLine("---------------------1");
                         tcp = CreateTCPConnection(IPAddress.Any, port, tcp);
                         if (tcp.Connected) connection = true;
                         else
@@ -100,6 +101,7 @@ namespace URSO_LED.Connection
                     }
                     else if (wifi.ConnectionStatus == WifiStatus.Disconnected)
                     {
+                        Console.WriteLine("----------------" + wifi.ConnectionStatus.ToString());
                         if (wifi.GetAccessPoints().Exists(item => item.Name == defaultAP))
                         {
                             ConnectNetwork(wifi, defaultAP, defaultPW);
@@ -138,6 +140,7 @@ namespace URSO_LED.Connection
                 ssid = "";
                 memory = false;
             }
+            Console.WriteLine("------------------" + memory.ToString());
             return memory;
         }
 
@@ -159,10 +162,15 @@ namespace URSO_LED.Connection
 
         private static TcpClient CreateTCPConnection(IPAddress IP, int port, TcpClient tcp)
         {
+            var delay = Task.Run(async delegate
+            {
+                await Task.Delay(100);
+            });
+            delay.Wait();
+
             try
             {
-                //tcp.Connect(IP, port);
-                var task =  tcp.ConnectAsync(IP, port);
+                var task = tcp.ConnectAsync(IP, port);
                 task.Wait();
             }
             catch (Exception)
@@ -170,12 +178,12 @@ namespace URSO_LED.Connection
                 try
                 {
                     IP = UDPListener();
-                    //tcp.Connect(IP, port);
                     var task = tcp.ConnectAsync(IP, port);
                     task.Wait();
                 }
                 catch (Exception) { }
             }
+            Console.WriteLine("---------------------2");
             return tcp;
         }
 
@@ -217,7 +225,7 @@ namespace URSO_LED.Connection
                 bool overwrite = true;
                 if (authRequest.IsPasswordRequired)
                 {
-                    if (accessPoint.HasProfile) overwrite = false;
+                    if (password == "" && accessPoint.HasProfile) overwrite = false;
                     else authRequest.Password = password;
                 }
                 accessPoint.Connect(authRequest, overwrite);
