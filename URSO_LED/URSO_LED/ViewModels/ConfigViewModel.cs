@@ -149,7 +149,8 @@ namespace URSO_LED.ViewModels
                 stream.Write(message, 0, message.Length);
                 message = Encoding.ASCII.GetBytes("NETPW" + password);
                 stream.Write(message, 0, message.Length);
-                Thread.Sleep(100);  //tymczasowo chamski delay
+                stream.Flush();
+                Thread.Sleep(1000);  //tymczasowo chamski delay
                 ConnectToNetworkExecute(parameter, true);
             }
         }

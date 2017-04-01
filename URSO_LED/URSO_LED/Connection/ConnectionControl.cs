@@ -120,6 +120,7 @@ namespace URSO_LED.Connection
             }
             else connection = true;
             if (connection) SaveMemory(((IPEndPoint)tcp.Client.RemoteEndPoint).Address, wifi.GetAccessPoints().Find(item => item.IsConnected).Name);
+            else DeleteMemory();
 
             return connection;
         }
@@ -190,7 +191,7 @@ namespace URSO_LED.Connection
 
         public static IPAddress UDPListener(int receiveTimeout)
         {
-            const int listenPort = 11000;
+            const int listenPort = 54070;
             IPAddress ServerIP = IPAddress.Any;
 
             UdpClient udp = new UdpClient(listenPort);
