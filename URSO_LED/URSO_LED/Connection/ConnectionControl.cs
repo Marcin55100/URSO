@@ -8,12 +8,13 @@ using System.Net.Sockets;
 using SimpleWifi;
 using System.IO;
 using GalaSoft.MvvmLight.Messaging;
+using System.Threading;
 
 namespace URSO_LED.Connection
 {
     class ConnectionControl
     {
-        const string defaultAP = "xBluegiga";
+        const string defaultAP = "Bluegiga";
         const string defaultPW = "bluegiga";
         const string memoryFile = @"\ConnectionInfo.txt";
         const int port = 54069;
@@ -166,7 +167,7 @@ namespace URSO_LED.Connection
             {
                 await Task.Delay(100);
             });
-            delay.Wait();
+            //delay.Wait();
 
             try
             {
@@ -177,23 +178,23 @@ namespace URSO_LED.Connection
             {
                 try
                 {
-                    IP = UDPListener();
+                    IP = UDPListener(2000);
                     var task = tcp.ConnectAsync(IP, port);
                     task.Wait();
                 }
                 catch (Exception) { }
             }
-            Console.WriteLine("---------------------2");
+            Console.WriteLine("---------------------TCP " + tcp.Connected.ToString());
             return tcp;
         }
 
-        private static IPAddress UDPListener()
+        public static IPAddress UDPListener(int receiveTimeout)
         {
             const int listenPort = 11000;
             IPAddress ServerIP = IPAddress.Any;
 
             UdpClient udp = new UdpClient(listenPort);
-            udp.Client.ReceiveTimeout = 2000;
+            udp.Client.ReceiveTimeout = receiveTimeout;
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
             IPEndPoint broadcast = new IPEndPoint(IPAddress.Broadcast, port);
             udp.Send(new byte[] { 1, 2, 3, 4, 5 }, 5, broadcast);
@@ -229,6 +230,7 @@ namespace URSO_LED.Connection
                     else authRequest.Password = password;
                 }
                 accessPoint.Connect(authRequest, overwrite);
+                Thread.Sleep(100);
             }
         }
 

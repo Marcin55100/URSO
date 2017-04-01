@@ -15,6 +15,7 @@ using System.Timers;
 using URSO_LED.Security;
 using System.Text;
 using System.IO;
+using System.Threading;
 //TODO Service Mode, Skalowalny widok, Odpowiednie rozszerzanie kolumn
 
 namespace URSO_LED.ViewModels
@@ -102,7 +103,7 @@ namespace URSO_LED.ViewModels
             }
         }
 
-        private void ConnectToNetworkExecute(object parameter)
+        private void ConnectToNetworkExecute(object parameter, bool changeNetwork = false)
         {
             if (Client.Connected)
             {
@@ -121,29 +122,15 @@ namespace URSO_LED.ViewModels
             }
             ConnectionControl.ConnectNetwork(wifi, SelectedNetwork.Name, password);
 
-            var task = Task.Run(async delegate
-            {
-                await Task.Delay(20000);
-            });
-            task.Wait();
-
             if (wifi.ConnectionStatus == WifiStatus.Connected)
             {
                 if (wifi.GetAccessPoints().Find(item => item.IsConnected).Name == SelectedNetwork.Name)
                 {
-                    ConnectionControl.DeleteMemory();
+                    if (changeNetwork) ConnectionControl.SaveMemory(ConnectionControl.UDPListener(30000), SelectedNetwork.Name);
+                    else ConnectionControl.DeleteMemory();
                     ConnectionControl.ConnectBluegiga(Client, wifi);
-                    //if (ConnectionControl.ConnectBluegiga(Client, wifi))
-                    //{
-                    //    MessageBox.Show("Połączono.");
-                    //    ConnectionStatus = "Połączono";
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Brak połączenia.");
-                    //    ConnectionStatus = "Brak połączenia.";
-                    //}
                 }
+                else MessageBox.Show("Nie udało połączyć się z wybraną siecią");
             }
             WifiSearch(wifi);
             ConnectionControl.SendClient(Client, wifi);
@@ -154,24 +141,17 @@ namespace URSO_LED.ViewModels
             var passwordContainer = parameter as IHavePassword;
             var secureString = passwordContainer.Password;
             string password = ConvertToUnsecureString(secureString);
-            Client.NoDelay = false;
-
             NetworkStream stream = Client.GetStream();
-            StreamWriter writer = new StreamWriter(stream);
+
             if (stream.CanWrite)
             {
                 byte[] message = Encoding.ASCII.GetBytes("BSSID" + SelectedNetwork.Name);
-                //writer.AutoFlush = true;
-                //stream.Write(message, 0, message.Length);
-                writer.Write("BSSID" + SelectedNetwork.Name);
-                writer.Flush();
+                stream.Write(message, 0, message.Length);
                 message = Encoding.ASCII.GetBytes("NETPW" + password);
-                //stream.Write(message, 0, message.Length);
-                writer.Write("NETPW" + password);
-                writer.Flush();
-                stream.Flush();
+                stream.Write(message, 0, message.Length);
+                Thread.Sleep(100);  //tymczasowo chamski delay
+                ConnectToNetworkExecute(parameter, true);
             }
-            ConnectToNetworkExecute(parameter);
         }
 
         private string ConvertToUnsecureString(System.Security.SecureString securePassword)
