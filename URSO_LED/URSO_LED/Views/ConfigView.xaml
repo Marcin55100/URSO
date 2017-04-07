@@ -27,7 +27,7 @@
         <StackPanel Grid.Column="1" x:Name="networkPanel" VerticalAlignment="Center" >
             <Label x:Name="passwordLabel" Content="Podaj hasło:"/>
             <!--<PasswordBox x:Name="passwordBox" PasswordChar="*" /> -->
-            <PasswordBox x:Name="passwordBox" PasswordChar="*"/>
+            <PasswordBox x:Name="passwordBox" PasswordChar="*" />
             <Button x:Name="connectButton" Content="Połącz" Command="{Binding ConnectToNetwork}" CommandParameter="{Binding ElementName=jeden}" HorizontalAlignment="Left"  VerticalAlignment="Top">
                 <Button.Style>
                     <Style TargetType="Button" >
