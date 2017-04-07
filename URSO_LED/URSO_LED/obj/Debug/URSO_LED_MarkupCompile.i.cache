@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\Jalo\Documents\GitHub\URSO\URSO_LED\URSO_LED\obj\Debug\
+C:\Users\Marcin\Documents\GitHub\URSO\URSO_LED\URSO_LED\obj\Debug\
 URSO_LED
 none
 false
 DEBUG;TRACE
-C:\Users\Jalo\Documents\GitHub\URSO\URSO_LED\URSO_LED\App.xaml
+C:\Users\Marcin\Documents\GitHub\URSO\URSO_LED\URSO_LED\App.xaml
 52039382270
 
-29169236691
-74-160640232
+29494650749
+742007835391
 MainWindow.xaml;Views\ConfigView.xaml;Views\InitView.xaml;Views\LEDView.xaml;Views\OutputView.xaml;
 
 True

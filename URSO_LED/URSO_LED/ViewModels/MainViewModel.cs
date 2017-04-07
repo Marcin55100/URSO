@@ -52,28 +52,7 @@ namespace URSO_LED.ViewModels
             ////}
         }
 
-        #region commands
-
-        private void ExecuteLEDViewCommand()
-        {
-           // CurrentViewModel=MainViewModel._ledViewModel;
-            var msg = new GoToPageMessage() { PageName = "LEDView" };
-            Messenger.Default.Send<GoToPageMessage>(msg);
-
-        }
-        private void ExecuteConfigViewCommand()
-        {
-           // CurrentViewModel = MainViewModel._configViewModel;
-            var msg = new GoToPageMessage() { PageName = "ConfigView" };
-            Messenger.Default.Send<GoToPageMessage>(msg);
-        }
-        private void ExecuteOutputViewCommand()
-        {
-           // CurrentViewModel = MainViewModel._outputViewModel;
-            var msg = new GoToPageMessage() { PageName = "OutputView" };
-            Messenger.Default.Send<GoToPageMessage>(msg);
-        }
-        #endregion
+     
 
         #region props
         public ViewModelBase CurrentViewModel
@@ -129,8 +108,33 @@ namespace URSO_LED.ViewModels
 
             if (Client.Connected == true)
                 IsConnected = "true";
+            else
+                IsConnected = "false";
+
             return null;
         }
+
+        private void ExecuteLEDViewCommand()
+        {
+            // CurrentViewModel=MainViewModel._ledViewModel;
+            var msg = new GoToPageMessage() { PageName = "LEDView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
+
+        }
+        private void ExecuteConfigViewCommand()
+        {
+            // CurrentViewModel = MainViewModel._configViewModel;
+            var msg = new GoToPageMessage() { PageName = "ConfigView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
+        }
+        private void ExecuteOutputViewCommand()
+        {
+            // CurrentViewModel = MainViewModel._outputViewModel;
+            var msg = new GoToPageMessage() { PageName = "OutputView" };
+            Messenger.Default.Send<GoToPageMessage>(msg);
+        }
+
+
 
         #endregion
     }

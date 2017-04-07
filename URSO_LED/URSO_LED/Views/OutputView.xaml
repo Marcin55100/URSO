@@ -101,32 +101,26 @@
             <Grid Grid.Row="1">
                 <StackPanel Visibility="{Binding Segments}">
                     <Label FontWeight="Bold" Content="Segmenty:"/>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Nazwa:"/>
-                    <TextBox Name="ledNameBox" Text="{Binding SegmentName}" MinWidth="50" TextWrapping="Wrap"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Typ:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Nazwa:"/>
+                        <TextBox Name="ledNameBox" Text="{Binding SegmentName}" MinWidth="50" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Typ:"/>
                         <ComboBox Name="TypeBox" ItemsSource="{Binding Path=TypeList}"
                   SelectedValue="{Binding Path=SegmentType}"
                                   />
                     </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                         <Button Name="addSegmentButton" Content="Dodaj" Command="{Binding AddSegment}">
                         </Button>
                         <Button Name="removeButton" Command="{Binding RemoveSegment}" Content="Usuń"/>
-                </StackPanel>
+                    </StackPanel>
 
                 </StackPanel>
 
-
             </Grid>
-
-
-
-
-
-            </Grid>
+        </Grid>
 
     </Grid>
 </UserControl>
