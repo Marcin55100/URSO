@@ -36,6 +36,7 @@ namespace URSO_LED.ViewModels
         public WifiNetwork _selectedNetwork;
         Wifi wifi;
         TcpClient Client;
+        public string _connectButtonEnabled;
 
         public ConfigViewModel()
         {
@@ -75,6 +76,17 @@ namespace URSO_LED.ViewModels
             }
         }
         public String Bold { get; set; } = "Bold";
+        public string ConnectButtonEnabled
+        {
+            get { return _connectButtonEnabled; }
+            set
+            {
+                if (value == _connectButtonEnabled)
+                    return;
+                _connectButtonEnabled = value;
+                RaisePropertyChanged("ConnectButtonEnabled");
+            }
+        }
 
         #endregion
 
@@ -83,6 +95,7 @@ namespace URSO_LED.ViewModels
         public RelayCommand<object> ConnectToNetwork { get; private set; }
         public RelayCommand<object> ChangeNetwork { get; private set; }
         public ICommand RefreshWifi { get; private set; }
+        public RelayCommand<object> VerifyPassword { get; private set; }
 
         #endregion
 
@@ -101,6 +114,16 @@ namespace URSO_LED.ViewModels
                     NetworkList.Add(new WifiNetwork { Name = accessPoint.Name, Font = fontValue });
                 }
             }
+        }
+
+        private void VerifyPasswordExecute(object parameter)
+        {
+            var passwordContainer = parameter as IHavePassword;
+            var secureString = passwordContainer.Password;
+            string password = ConvertToUnsecureString(secureString);
+
+            bool verify = wifi.GetAccessPoints().Find(item => item.Name == SelectedNetwork.Name).IsValidPassword(password);
+            SelectedNetwork.ConnectButtonEnabled = verify.ToString();
         }
 
         private void ConnectToNetworkExecute(object parameter, bool changeNetwork = false)
@@ -212,6 +235,7 @@ namespace URSO_LED.ViewModels
             ConnectToNetwork = new RelayCommand<object>((s) => ConnectToNetworkExecute(s));
             ChangeNetwork = new RelayCommand<object>((s) => ChangeNetworkExecute(s));
             RefreshWifi = new RelayCommand(() => RefreshWifiExecute(), () => true);
+            VerifyPassword = new RelayCommand<object>((s) => VerifyPasswordExecute(s));
         }
 
         #endregion

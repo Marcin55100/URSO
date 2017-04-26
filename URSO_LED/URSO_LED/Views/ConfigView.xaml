@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:URSO_LED.Views"
              mc:Ignorable="d" 
-             x:Name="jeden"
+             x:Name="configUserControl"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              DataContext="{Binding ConfigViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -27,20 +29,26 @@
         <StackPanel Grid.Column="1" x:Name="networkPanel" VerticalAlignment="Center" >
             <Label x:Name="passwordLabel" Content="Podaj hasło:"/>
             <!--<PasswordBox x:Name="passwordBox" PasswordChar="*" /> -->
-            <PasswordBox x:Name="passwordBox" PasswordChar="*" />
-            <Button x:Name="connectButton" Content="Połącz" Command="{Binding ConnectToNetwork}" CommandParameter="{Binding ElementName=jeden}" HorizontalAlignment="Left"  VerticalAlignment="Top">
+            <PasswordBox x:Name="passwordBox" PasswordChar="*">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PasswordChanged">
+                        <cmd:EventToCommand Command="{Binding VerifyPassword}" CommandParameter="{Binding ElementName=configUserControl}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </PasswordBox>
+            <Button x:Name="connectButton" Content="Połącz" Command="{Binding ConnectToNetwork}" CommandParameter="{Binding ElementName=configUserControl}" HorizontalAlignment="Left"  VerticalAlignment="Top">
                 <Button.Style>
                     <Style TargetType="Button" >
-                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="IsEnabled" Value="False" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedNetwork.Font}" Value="Bold">
-                                <Setter Property="IsEnabled" Value="False" />
+                            <DataTrigger Binding="{Binding SelectedNetwork.ConnectButtonEnabled}" Value="True">
+                                <Setter Property="IsEnabled" Value="True" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="changeButton" Content="Przełącz sieć" Command="{Binding ChangeNetwork}" CommandParameter="{Binding ElementName=jeden}" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button x:Name="changeButton" Content="Przełącz sieć" Command="{Binding ChangeNetwork}" CommandParameter="{Binding ElementName=configUserControl}" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Button.Style>
                     <Style TargetType="Button" >
                         <Setter Property="IsEnabled" Value="True" />

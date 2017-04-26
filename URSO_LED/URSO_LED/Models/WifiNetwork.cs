@@ -13,7 +13,7 @@ namespace URSO_LED.Models
 
         public string Name { get; set; }
         public string Font { get; set; } = "Normal";
-
+        public string ConnectButtonEnabled { get; set; }
 
         public void NotifyPropertyChanged(string propName)
         {
