@@ -16,7 +16,7 @@ using URSO_LED.Security;
 using System.Text;
 using System.IO;
 using System.Threading;
-//TODO Service Mode, Skalowalny widok, Odpowiednie rozszerzanie kolumn
+//TODO Suwaki znikają, Aktualizacja koloru LED po zerwaniu połączenia, Service Mode, Skalowalny widok, Odpowiednie rozszerzanie kolumn
 
 namespace URSO_LED.ViewModels
 {

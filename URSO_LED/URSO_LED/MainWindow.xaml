@@ -14,17 +14,17 @@
         >
     <Window.Resources>
         <DataTemplate x:Key="myDataTemplate">
-            <Label FontStyle="Oblique" FontWeight="Bold" Content="{Binding}" HorizontalAlignment="Center"/>
+            <Label FontStyle="Oblique" FontWeight="Bold" Content="{Binding Text}" Foreground="{Binding Background}" HorizontalAlignment="Center"/>
         </DataTemplate>
     </Window.Resources>
 
     <Grid>
- 
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        
+
         <!-- COLUMN 0-->
         <Grid Grid.Column="0" Background="Aqua">
             <Grid.RowDefinitions>
@@ -32,10 +32,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-           
 
 
-                <!--<Button Grid.Row="0" Command="{Binding LEDViewCommand}" Content="LED" DockPanel.Dock="Top" >
+
+            <!--<Button Grid.Row="0" Command="{Binding LEDViewCommand}" Content="LED" DockPanel.Dock="Top" >
 
                     <Button.Style>
                         <Style TargetType="Button">
@@ -58,7 +58,7 @@
                 <Button  Grid.Row="2" Command="{Binding OutputViewCommand}"
                     Content="Ustawienia portów" 
                         DockPanel.Dock="Top"/>-->
-            <ListBox x:Name="listBox" Grid.Row="1" Background="Aqua"  BorderThickness="0" ItemsSource="{Binding MenuList}" ItemTemplate="{StaticResource myDataTemplate}" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+            <ListBox x:Name="listBox" Grid.Row="1" Background="Aqua" BorderThickness="0" ItemsSource="{Binding MenuList}" ItemTemplate="{StaticResource myDataTemplate}" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <cmd:EventToCommand Command="{Binding DataContext.SelectionChangedCommand,
@@ -66,26 +66,34 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
-
-
-
                 <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <!-- <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"/> -->
-                            <UniformGrid  Rows="3" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
+                    <ItemsPanelTemplate>
+                        <UniformGrid  Rows="3" >
+
+                        </UniformGrid>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+              <!--  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="{Binding Background}"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+               -->
+            
+
+
+            </ListBox>
 
 
 
-           
+
         </Grid>
 
         <!-- COLUMN 1-->
         <ContentControl Grid.Column="1" Name="contentControl1"  />
-       
-       
+
+
 
     </Grid>
 </Window>
