@@ -5,14 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:URSO_LED"
         mc:Ignorable="d"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="MainWindow" Height="380" Width="524"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         ContentRendered="Window_ContentRendered" 
         Loaded="Window_Loaded"
         >
-    <Grid>
-        
+    <Window.Resources>
+        <DataTemplate x:Key="myDataTemplate">
+            <Label FontStyle="Oblique" FontWeight="Bold" Content="{Binding}" HorizontalAlignment="Center"/>
+        </DataTemplate>
+    </Window.Resources>
 
+    <Grid>
+ 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="3*"/>
@@ -25,14 +32,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+           
 
-                <Button Grid.Row="0" Command="{Binding LEDViewCommand}" Content="LED" DockPanel.Dock="Top" >
+
+                <!--<Button Grid.Row="0" Command="{Binding LEDViewCommand}" Content="LED" DockPanel.Dock="Top" >
 
                     <Button.Style>
                         <Style TargetType="Button">
@@ -54,8 +57,29 @@
                     DockPanel.Dock="Top" />
                 <Button  Grid.Row="2" Command="{Binding OutputViewCommand}"
                     Content="Ustawienia portów" 
-                        DockPanel.Dock="Top"/>
-            </Grid>
+                        DockPanel.Dock="Top"/>-->
+            <ListBox x:Name="listBox" Grid.Row="1" Background="Aqua"  BorderThickness="0" ItemsSource="{Binding MenuList}" ItemTemplate="{StaticResource myDataTemplate}" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <cmd:EventToCommand Command="{Binding DataContext.SelectionChangedCommand,
+                             RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding ElementName=listBox}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+
+
+
+                <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!-- <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"/> -->
+                            <UniformGrid  Rows="3" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+
+
+
+           
         </Grid>
 
         <!-- COLUMN 1-->

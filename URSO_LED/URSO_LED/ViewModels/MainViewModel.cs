@@ -5,6 +5,8 @@ using System;
 using GalaSoft.MvvmLight.Messaging;
 using URSO_LED.Connection;
 using System.Net.Sockets;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace URSO_LED.ViewModels
 {
@@ -28,19 +30,23 @@ namespace URSO_LED.ViewModels
         /// 
         private ViewModelBase _currentViewModel;
         private string _isConnected = "false";
-       // readonly static LEDViewModel _ledViewModel = new LEDViewModel();
-       // readonly static InitViewModel _initViewModel = new InitViewModel();
-       // readonly static ConfigViewModel _configViewModel = new ConfigViewModel();
-       // readonly static OutputViewModel _outputViewModel = new OutputViewModel();
+        private ObservableCollection<String> _menuList;
+        // readonly static LEDViewModel _ledViewModel = new LEDViewModel();
+        // readonly static InitViewModel _initViewModel = new InitViewModel();
+        // readonly static ConfigViewModel _configViewModel = new ConfigViewModel();
+        // readonly static OutputViewModel _outputViewModel = new OutputViewModel();
         TcpClient Client;
 
         public MainViewModel()
         {
             // CurrentViewModel = _initViewModel;
-            LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
-            ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
-            OutputViewCommand = new RelayCommand(() => ExecuteOutputViewCommand());
+            //LEDViewCommand = new RelayCommand(() => ExecuteLEDViewCommand());
+            //ConfigViewCommand = new RelayCommand(() => ExecuteConfigViewCommand());
+            //OutputViewCommand = new RelayCommand(() => ExecuteOutputViewCommand());
+            SelectionChangedCommand = new RelayCommand<object>((s) => ExecuteSelectionChangedCommand(s));
             RegisterMessage();
+            _menuList = new ObservableCollection<string>() { "LED", "Konfiguracja", "Ustawienia portów"};
+            
 
             ////if (IsInDesignMode)
             ////{
@@ -52,7 +58,8 @@ namespace URSO_LED.ViewModels
             ////}
         }
 
-     
+
+
 
         #region props
         public ViewModelBase CurrentViewModel
@@ -69,7 +76,24 @@ namespace URSO_LED.ViewModels
                 RaisePropertyChanged("CurrentViewModel");
             }
         }
-       
+
+        public ObservableCollection<String> MenuList
+        {
+            get
+            {
+                return _menuList;
+            }
+            set
+            {
+                if (value == _menuList)
+                    return;
+
+                _menuList = value;
+                RaisePropertyChanged("MenuList");
+            }
+        }
+
+
         public string IsConnected
         {
             get
@@ -88,9 +112,10 @@ namespace URSO_LED.ViewModels
         #endregion
 
         #region commands
-        public ICommand LEDViewCommand { get; private set; }
-        public ICommand ConfigViewCommand { get; private set; }
-        public ICommand OutputViewCommand { get; private set; }
+        //public ICommand LEDViewCommand { get; private set; }
+        //public ICommand ConfigViewCommand { get; private set; }
+        //public ICommand OutputViewCommand { get; private set; }
+        public RelayCommand<object> SelectionChangedCommand { get; private set; }
         #endregion
 
         #region methods
@@ -112,6 +137,18 @@ namespace URSO_LED.ViewModels
                 IsConnected = "false";
 
             return null;
+        }
+
+        private void ExecuteSelectionChangedCommand(object parameter)
+        {
+            var listBox = parameter as ListBox;
+            if (listBox.SelectedItem.ToString() == "LED")
+                ExecuteLEDViewCommand();
+            else if (listBox.SelectedItem.ToString() == "Konfiguracja")
+                ExecuteConfigViewCommand();
+            else if (listBox.SelectedItem.ToString() == "Ustawienia portów")
+                ExecuteOutputViewCommand();
+
         }
 
         private void ExecuteLEDViewCommand()
