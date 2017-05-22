@@ -143,10 +143,6 @@ namespace URSO_LED.ViewModels
             }
         }
 
- 
-
-
-
         public string IsConnected
         {
             get

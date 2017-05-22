@@ -12,6 +12,7 @@ using URSO_LED.Models;
 using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
+using System.Windows.Controls;
 //Ctrl+K+D
 namespace URSO_LED.ViewModels
 {
@@ -219,8 +220,10 @@ namespace URSO_LED.ViewModels
         public ICommand AddConfiguration { get; private set; }
         public ICommand AddSegment { get; private set; }
         public ICommand SaveConfiguration { get; private set; }
+        public ICommand SaveExistingConfiguration { get; private set; }
         public ICommand RemoveConfiguration { get; private set; }
         public ICommand RemoveSegment { get; private set; }
+        public RelayCommand<object> TabSelectionChanged { get; private set; }
         #endregion
 
         #region methods
@@ -290,6 +293,14 @@ namespace URSO_LED.ViewModels
             LoadConfigurations();
         }
 
+        private void SaveExistingConfigurationExecute()
+        {
+            var systemPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            ListToXmlFile(systemPath + "\\" + SelectedConfig + ".xml");
+            LoadConfigurations();
+        }
+
+
         private void RegisterMessage()
         {
             Messenger.Default.Register<MessageOne>(this,
@@ -309,11 +320,20 @@ namespace URSO_LED.ViewModels
         private void RemoveSegmentExecute()
         {
             SegmentList.Remove(SelectedSegment);
+            if(id>0)
             id--;
         }
 
+        private void TabSelectionChangedExecute(object tab)
+        {
+            var tabControl = tab as TabControl;
+            var item = tabControl.SelectedItem as TabItem;
+            if (item.Header.ToString() == "Nowa")
+                SegmentList.Clear();
 
-       
+        }
+
+
         private object SendMessage()
         {
             var msg = new MessageOne() { Status = true };
@@ -374,8 +394,10 @@ namespace URSO_LED.ViewModels
             AddConfiguration = new RelayCommand(() => AddConfigurationExecute(), () => true);
             AddSegment = new RelayCommand(() => AddSegmentExecute(), () => true);
             SaveConfiguration = new RelayCommand(() => SaveConfigurationExecute(), () => true);
+            SaveExistingConfiguration = new RelayCommand(() => SaveExistingConfigurationExecute(), () => true);
             RemoveConfiguration = new RelayCommand(() => RemoveConfigurationExecute(), () => true);
             RemoveSegment = new RelayCommand(() => RemoveSegmentExecute(), () => true);
+            TabSelectionChanged = new RelayCommand<object>((s) => TabSelectionChangedExecute(s));
         }
 
         #endregion

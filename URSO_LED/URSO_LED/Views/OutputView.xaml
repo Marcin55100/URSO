@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:URSO_LED.Views"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              DataContext="{Binding OutputViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -20,86 +22,87 @@
             </Grid.RowDefinitions>
             <!--ROW 0 -->
             <Grid Grid.Row="0">
-                <StackPanel Orientation="Vertical">
-                    <Label FontWeight="Bold" Content="Nowa konfiguracja:"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Wpisz nazwę:"/>
-                        <TextBox Name="configNameBox" Text="{Binding ConfigName}" MinWidth="50" TextWrapping="Wrap"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Name="addConfigButton" DataContext="{Binding SelectedNetwork}" Content="Utwórz" Command="{Binding AddConfiguration}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="IsEnabled" Value="True" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Source=SelectedNetwork, Path=Font}" Value="Bold">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button Name="saveConfigButton" Content="Zapisz" Command="{Binding SaveConfiguration}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="IsEnabled" Value="True" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=configNameBox}" Value="">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
+
+                <Label Content="Konfiguracja:"></Label>
+                <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="142" Margin="0,26,0,-18" VerticalAlignment="Top" Width="150">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <cmd:EventToCommand Command="{Binding DataContext.TabSelectionChanged,
+                             RelativeSource={RelativeSource AncestorType=TabControl}}" CommandParameter="{Binding ElementName=tabControl}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+
+                    <TabItem Header="Nowa">
+                        <StackPanel Orientation="Vertical">
+                            <Label FontWeight="Bold" Content="Nowa konfiguracja:"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Wpisz nazwę:"/>
+                                <TextBox Name="configNameBox" Text="{Binding ConfigName}" MinWidth="50" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="addConfigButton" DataContext="{Binding SelectedNetwork}" Content="Utwórz" Command="{Binding AddConfiguration}">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Source=SelectedNetwork, Path=Font}" Value="Bold">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button Name="saveConfigButton" Content="Zapisz" Command="{Binding SaveConfiguration}">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=configNameBox}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
 
 
 
 
 
 
-                        </Button>
+                                </Button>
 
-                    </StackPanel>
-                   
+                            </StackPanel>
 
-                </StackPanel>
-            </Grid>
-            <!--ROW 1 -->
-            <Grid Grid.Row="1">
-                <StackPanel Orientation="Vertical">
-                    <Label FontWeight="Bold" Content="Istniejąca konfiguracja:"/>
-                    <ListBox x:Name="fileBox" 
+
+                        </StackPanel>
+
+                    </TabItem>
+                    <TabItem Header="Istniejąca">
+                        <StackPanel Orientation="Vertical">
+                            <Label FontWeight="Bold" Content="Istniejąca konfiguracja:"/>
+                            <ListBox x:Name="fileBox" 
                              SelectedValue="{Binding SelectedConfig}"
                              ItemsSource="{Binding Path=ConfigList}" Height="50" />
-                    <StackPanel Orientation="Horizontal">
-                        <Button Name="removeConfigButton" Command="{Binding RemoveConfiguration}" Content="Usuń"/>
-                    </StackPanel>
-                </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="removeConfigButton" Command="{Binding RemoveConfiguration}" Content="Usuń"/>
+                                <Button Name="saveExistingConfigButton" Content="Zapisz" Command="{Binding SaveExistingConfiguration}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+
+
+
+
+
+
+
+
             </Grid>
-
-        </Grid>
-
-
-
-        <!--COLUMN 1 -->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ListView Grid.Row="0" Name="listView" 
-                      SelectedItem="{Binding Path=SelectedSegment}"
-                      ItemsSource="{Binding Path=SegmentList}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding Type}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
             <!--ROW 1 -->
             <Grid Grid.Row="1">
-                <StackPanel Visibility="{Binding Segments}">
+                <StackPanel Visibility="{Binding Segments}" Margin="0,22,0,10">
                     <Label FontWeight="Bold" Content="Segmenty:"/>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Nazwa:"/>
@@ -118,8 +121,28 @@
                     </StackPanel>
 
                 </StackPanel>
-
             </Grid>
+
+        </Grid>
+
+
+
+        <!--COLUMN 1 -->
+        <Grid Grid.Column="1">
+
+            <ListView Name="listView" 
+                      SelectedItem="{Binding Path=SelectedSegment}"
+                      ItemsSource="{Binding Path=SegmentList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding Type}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <!--ROW 1 -->
+
         </Grid>
 
     </Grid>
